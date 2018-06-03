@@ -42,14 +42,6 @@ class Hand {
         }
     }
     
-    
-    /*
-     
-     TODO:
-     - Setup a git repository to commit ths awesomeness!
-     
-     */
-    
     // Returns an identical copy of a hand of cards
     func copyHand(hand: [Card]) -> [Card] {
         var copy = [Card]()
