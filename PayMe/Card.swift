@@ -7,18 +7,18 @@
 //
 
 import Foundation
+import UIKit
 
 enum Suit: String {
     case spades = "♠"
     case hearts = "♥"
     case diamonds = "♦"
     case clubs = "♣"
-    case joker = "JOKER"
+    case blackJoker, redJoker = "JOKER"
 }
 
 enum Name: String {
     case ace = "A"
-    case one = "1"
     case two = "2"
     case three = "3"
     case four = "4"
@@ -31,7 +31,8 @@ enum Name: String {
     case jack = "J"
     case queen = "Q"
     case king = "K"
-    case joker = "JOKER"
+    case blackJoker = "RJOKER"
+    case redJoker = "BJOKER"
 }
 
 class Card {
@@ -41,7 +42,6 @@ class Card {
     var order: Int {
         switch name {
         case .ace: return 0
-        case .one: return 1
         case .two: return 2
         case .three: return 3
         case .four: return 4
@@ -54,14 +54,14 @@ class Card {
         case .jack: return 11
         case .queen: return 12
         case .king: return 13
-        case .joker: return 14
+        case .blackJoker: return 14
+        case .redJoker: return 15
         }
     }
     
     var points: Int {
         switch name {
         case .ace: return 15
-        case .one: return 1
         case .two: return 2
         case .three: return 3
         case .four: return 4
@@ -74,7 +74,25 @@ class Card {
         case .jack: return 10
         case .queen: return 10
         case .king: return 10
-        case .joker: return 0
+        case .blackJoker: return 0
+        case .redJoker: return 0
+        }
+    }
+    
+    var image: UIImage {
+        switch suit {
+        case .spades:
+            return UIImage(named: String(format: "%@S", name.rawValue))!
+        case .hearts:
+            return UIImage(named: String(format: "%@H", name.rawValue))!
+        case .diamonds:
+            return UIImage(named: String(format: "%@D", name.rawValue))!
+        case .clubs:
+            return UIImage(named: String(format: "%@C", name.rawValue))!
+        case .blackJoker:
+            return UIImage(named: name.rawValue)!
+        case .redJoker:
+            return UIImage(named: name.rawValue)!
         }
     }
     

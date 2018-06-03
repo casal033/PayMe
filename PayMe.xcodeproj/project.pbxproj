@@ -18,6 +18,9 @@
 		232EA3E420BF7ED300263776 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E320BF7ED300263776 /* Deck.swift */; };
 		232EA3E620BF8B5500263776 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E520BF8B5500263776 /* Player.swift */; };
 		232EA3E820C35C7D00263776 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E720C35C7D00263776 /* Hand.swift */; };
+		237C65E120C3733500B64DB5 /* Faces in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E020C3733500B64DB5 /* Faces */; };
+		237C65E320C3735800B64DB5 /* Backs in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E220C3735800B64DB5 /* Backs */; };
+		237C65E720C374FD00B64DB5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237C65E620C374FD00B64DB5 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		232EA3E320BF7ED300263776 /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		232EA3E520BF8B5500263776 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		232EA3E720C35C7D00263776 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hand.swift; sourceTree = "<group>"; };
+		237C65E020C3733500B64DB5 /* Faces */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Faces; path = Images/Faces; sourceTree = "<group>"; };
+		237C65E220C3735800B64DB5 /* Backs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Backs; path = Images/Backs; sourceTree = "<group>"; };
+		237C65E620C374FD00B64DB5 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +113,9 @@
 			children = (
 				232EA3B220BF753B00263776 /* AppDelegate.swift */,
 				232EA3B420BF753B00263776 /* ViewController.swift */,
+				237C655F20C36E7F00B64DB5 /* Images */,
 				232EA3E020BF757000263776 /* Models */,
+				237C65E520C374E600B64DB5 /* Views */,
 				232EA3B620BF753B00263776 /* Main.storyboard */,
 				232EA3B920BF753B00263776 /* Assets.xcassets */,
 				232EA3BB20BF753B00263776 /* LaunchScreen.storyboard */,
@@ -143,6 +151,23 @@
 				232EA3E720C35C7D00263776 /* Hand.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		237C655F20C36E7F00B64DB5 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				237C65E220C3735800B64DB5 /* Backs */,
+				237C65E020C3733500B64DB5 /* Faces */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		237C65E520C374E600B64DB5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				237C65E620C374FD00B64DB5 /* CardView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,6 +277,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237C65E120C3733500B64DB5 /* Faces in Resources */,
+				237C65E320C3735800B64DB5 /* Backs in Resources */,
 				232EA3BD20BF753B00263776 /* LaunchScreen.storyboard in Resources */,
 				232EA3BA20BF753B00263776 /* Assets.xcassets in Resources */,
 				232EA3B820BF753B00263776 /* Main.storyboard in Resources */,
@@ -279,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237C65E720C374FD00B64DB5 /* CardView.swift in Sources */,
 				232EA3E420BF7ED300263776 /* Deck.swift in Sources */,
 				232EA3B520BF753B00263776 /* ViewController.swift in Sources */,
 				232EA3E820C35C7D00263776 /* Hand.swift in Sources */,
@@ -531,6 +559,7 @@
 				232EA3D920BF753B00263776 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		232EA3DA20BF753B00263776 /* Build configuration list for PBXNativeTarget "PayMeTests" */ = {
 			isa = XCConfigurationList;
@@ -539,6 +568,7 @@
 				232EA3DC20BF753B00263776 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		232EA3DD20BF753B00263776 /* Build configuration list for PBXNativeTarget "PayMeUITests" */ = {
 			isa = XCConfigurationList;
@@ -547,6 +577,7 @@
 				232EA3DF20BF753B00263776 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

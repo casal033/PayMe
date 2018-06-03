@@ -71,8 +71,8 @@ class Deck {
         Card.init(suit: .spades, name: .king),
         
         // jokers
-        Card.init(suit: .joker, name: .joker),
-        Card.init(suit: .joker, name: .joker)
+        Card.init(suit: .redJoker, name: .redJoker),
+        Card.init(suit: .blackJoker, name: .blackJoker)
                          ]
     
     func shuffle() {

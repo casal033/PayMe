@@ -25,7 +25,6 @@ class Hand {
     func points(name: Name) -> Int {
         switch name {
         case .ace: return 15
-        case .one: return 1
         case .two: return 2
         case .three: return 3
         case .four: return 4
@@ -38,7 +37,8 @@ class Hand {
         case .jack: return 10
         case .queen: return 10
         case .king: return 10
-        case .joker: return 0
+        case .redJoker: return 0
+        case .blackJoker: return 0
         }
     }
     
