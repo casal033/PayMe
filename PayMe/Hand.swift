@@ -140,7 +140,109 @@ class Hand {
     
     // Returns the player's hand sorted by runs into an array
     // from least number of cards in the run to the most
-    func organizedByRuns(hand: [Card]) -> [[Card]] {
+    // THIS IS BUILT WITH A MAXIMUM OF THREE DECKS BEING USED
+    func organizedByRuns(hand: [Card], wild: Name) -> [[Card]] {
+        
+        let currentData: [[Card]] = getRunData(hand: hand) // Starting / Current Data to comb through
+        var currentRunIndex = 0 // Index of a current unique run to append a card
+        
+        var sortedRuns = [[Card]]() // Array of sorted runs
+        var remainingCards = [[Card]]() // Array of cards that couldn't be placed in a run
+        
+        // Loop through hand that's sorted into an array of run arrays
+        for runArray in currentData {
+            // If this array had less than three card
+            if runArray.count < 3 {
+                remainingCards.append(runArray)
+                break
+            }
+            
+            // Loop through cards in the run array
+            for card in runArray {
+                // If we're in a new hand
+                if sortedRuns.count == 0 {
+                    sortedRuns[currentRunIndex] = [card]
+                    
+                } else if sortedRuns[currentRunIndex].last!.order <= card.order {
+                    // Update the run index
+                    currentRunIndex = getCurrentRunIndex(sortedRuns: sortedRuns, card: card, currentRunIndex: currentRunIndex)
+                    
+                    var currentRun = sortedRuns[currentRunIndex] // Grab the current run
+                    currentRun.append(card) // Append this card
+                    sortedRuns[currentRunIndex] = currentRun // Update the sortedRuns array
+                }
+            }
+        }
+        
+        // Handle wild cards
+        var wilds = [Card]()
+        var index = 0
+        while index < remainingCards.count {
+            
+            var newRunArray = [Card]()
+            for card in remainingCards[index] {
+                if card.name == wild || card.name == .redJoker || card.name == .blackJoker {
+                    wilds.append(card)
+                } else {
+                    newRunArray.append(card)
+                }
+            }
+            
+            // Update the array in case we removed a wild
+            remainingCards[index] = newRunArray
+            
+            index = index + 1
+        }
+        
+        while wilds.count > 0 {
+            // Find the most points
+            var maxPoints = 0
+            var maxArray = [Card]()
+            for runArray in remainingCards {
+                // Only check if there's at least 2 cards in an array
+                if runArray.count > 2 {
+                    var points = 0
+                    for card in runArray {
+                        points = points + card.points
+                    }
+                    
+                    if points > maxPoints {
+                        
+                    }
+
+                }
+            }
+
+        }
+
+        // Add the two final arrrays together and return
+        for runArray in remainingCards {
+            sortedRuns.append(runArray)
+        }
+        
+        return sortedRuns
+    }
+    
+    func getCurrentRunIndex(sortedRuns: [[Card]], card: Card, currentRunIndex: Int) -> Int {
+        // Loop through our added ordered runs, backwards
+        var index = sortedRuns.count - 1
+        while index > -1 { // Include 0 for 1st position
+            
+            // If an added run has the same suit and this card can be appended to
+            // the added run, add it and update the run index to this run's index
+            let lastCard = sortedRuns[index].last!
+            if lastCard.suit == card.suit && lastCard.order < card.order && index <= currentRunIndex {
+                return index
+            }
+
+            index = index - 1
+        }
+        
+        // There wasn't an available run, start a new one
+        return sortedRuns.count
+    }
+    
+    func getRunData(hand: [Card]) -> [[Card]] {
         var arrayOfCards = [Card]()
         var arrayOfRuns = [[Card]]()
         
