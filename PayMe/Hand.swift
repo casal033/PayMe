@@ -53,9 +53,23 @@ class Hand {
         return copy
     }
     
+    func removeWildsFromHand(wild: Name, hand: [Card]) -> (wilds: [Card], hand: [Card]) {
+        // Pull wilds from the remaining cards
+        var wilds = [Card]()
+        var newHand = [Card]()
+        for card in hand {
+            if card.name == wild || card.name == .redJoker || card.name == .blackJoker {
+                wilds.append(card)
+            } else {
+                newHand.append(card)
+            }
+        }
+        return (wilds, newHand)
+    }
+    
     // Makes a new hand with all sets removed, then returns the
     // points of the remaining hand with all runs removed
-    func getTotalPointsBasedOnSets(hand: [Card]) -> Int {
+    func getTotalPointsBasedOnSets(hand: [Card], wild: Name) -> Int {
         var nonSetCards = [Card]()
         for arrayOfCards in self.organizedBySets(hand:hand) {
             if arrayOfCards.count < 3 {
@@ -65,14 +79,14 @@ class Hand {
             }
         }
         
-        return self.getPointsForRunsInHand(hand: nonSetCards)
+        return self.getPointsForRunsInHand(hand: nonSetCards, wild: wild)
     }
     
     // Makes a new hand with all runs removed, then returns the
     // points of the remaining hand with all sets removed
-    func getTotalPointsBasedOnRuns(hand: [Card]) -> Int {
+    func getTotalPointsBasedOnRuns(hand: [Card], wild: Name) -> Int {
         var nonRunCards = [Card]()
-        for arrayOfCards in self.organizedByRuns(hand:hand) {
+        for arrayOfCards in self.organizedByRuns(hand:hand, wild: wild) {
             if arrayOfCards.count < 3 {
                 for card in arrayOfCards {
                     nonRunCards.append(card)
@@ -97,9 +111,9 @@ class Hand {
     }
     
     // Returns the number of points in the hand based on runs
-    func getPointsForRunsInHand(hand: [Card]) -> Int {
+    func getPointsForRunsInHand(hand: [Card], wild: Name) -> Int {
         var points = 0
-        for arrayOfCards in self.organizedByRuns(hand: hand) {
+        for arrayOfCards in self.organizedByRuns(hand: hand, wild: wild) {
             if arrayOfCards.count < 3 {
                 // Get points for the remaining cards
                 for card in arrayOfCards {
@@ -143,10 +157,10 @@ class Hand {
     // THIS IS BUILT WITH A MAXIMUM OF THREE DECKS BEING USED
     func organizedByRuns(hand: [Card], wild: Name) -> [[Card]] {
         
-        let currentData: [[Card]] = getRunData(hand: hand) // Starting / Current Data to comb through
+        let currentData: [[Card]] = getRunData(hand: hand) // Starting Data to comb through
         var currentRunIndex = 0 // Index of a current unique run to append a card
         
-        var sortedRuns = [[Card]]() // Array of sorted runs
+        var runsSortedByCount = [[Card]]() // Array of sorted runs
         var remainingCards = [[Card]]() // Array of cards that couldn't be placed in a run
         
         // Loop through hand that's sorted into an array of run arrays
@@ -160,86 +174,85 @@ class Hand {
             // Loop through cards in the run array
             for card in runArray {
                 // If we're in a new hand
-                if sortedRuns.count == 0 {
-                    sortedRuns[currentRunIndex] = [card]
+                if runsSortedByCount.count == 0 {
+                    runsSortedByCount[currentRunIndex] = [card]
+                    break
+                }
+                
+                // Sort the runs by the number of cards in their arrays from LOWEST to HIGHEST
+                runsSortedByCount = runsSortedByCount.sorted(by: { $0.count < $1.count })
+                
+                // Find the index to add this card
+                currentRunIndex = 0
+                for addedRun in runsSortedByCount {
+                    // If an added run has the same suit and this card can be appended
+                    // to the added run, stop incrementing the current run index
+                    if addedRun.last!.suit == card.suit && addedRun.last!.order < card.order {
+                        break // Stop looping, were at the right index
+                    }
                     
-                } else if sortedRuns[currentRunIndex].last!.order <= card.order {
-                    // Update the run index
-                    currentRunIndex = getCurrentRunIndex(sortedRuns: sortedRuns, card: card, currentRunIndex: currentRunIndex)
+                    currentRunIndex = currentRunIndex + 1
+                }
+                
+                // There wasn't an available run, start a new one
+                if currentRunIndex >= runsSortedByCount.count {
+                    runsSortedByCount.append([card]) // Make a new array
                     
-                    var currentRun = sortedRuns[currentRunIndex] // Grab the current run
+                } else { // Add it to the current run
+                    var currentRun = runsSortedByCount[currentRunIndex] // Grab the current run
                     currentRun.append(card) // Append this card
-                    sortedRuns[currentRunIndex] = currentRun // Update the sortedRuns array
+                    runsSortedByCount[currentRunIndex] = currentRun // Update the runsSortedByCount array
                 }
             }
         }
-        
-        // Handle wild cards
-        var wilds = [Card]()
-        var index = 0
-        while index < remainingCards.count {
+
+        // Grab the unique runs (arrays with more than 2 cards) and sort them by count
+        var uniqueRuns = runsSortedByCount.filter({ $0.count > 2 }).sorted(by: { $0.count < $1.count })
+
+        // Loop through the partial runs with 1 or 2 cards
+        for runArray in runsSortedByCount.filter({ $0.count <= 2 }).sorted(by: { $0.count < $1.count }) {
             
-            var newRunArray = [Card]()
-            for card in remainingCards[index] {
-                if card.name == wild || card.name == .redJoker || card.name == .blackJoker {
-                    wilds.append(card)
-                } else {
-                    newRunArray.append(card)
-                }
-            }
-            
-            // Update the array in case we removed a wild
-            remainingCards[index] = newRunArray
-            
-            index = index + 1
-        }
-        
-        while wilds.count > 0 {
-            // Find the most points
-            var maxPoints = 0
-            var maxArray = [Card]()
-            for runArray in remainingCards {
-                // Only check if there's at least 2 cards in an array
-                if runArray.count > 2 {
-                    var points = 0
-                    for card in runArray {
-                        points = points + card.points
+            // Loop through the partial run
+            var notMoved = [Card]()
+            for card in runArray {
+                
+                // Try and find a run to add the current card
+                var index = 0
+                var added = false
+                while index < uniqueRuns.count {
+                    var uniqueRun = uniqueRuns[index]
+                    if uniqueRun.last!.suit == card.suit && uniqueRun.last!.order < card.order {
+                        uniqueRun.append(card)
+                        added = true
                     }
                     
-                    if points > maxPoints {
-                        
-                    }
-
+                    index = index + 1
+                }
+                
+                // No luck, store the card to add it to the remaining cards
+                if !added {
+                    notMoved.append(card)
+                    
+                } else { // We added the card, resort the unique runs
+                    uniqueRuns = runsSortedByCount.filter({ $0.count > 2 }).sorted(by: { $0.count < $1.count })
                 }
             }
 
+            // If cards weren't removed from the array
+            if notMoved.count > 0 {
+                remainingCards.append(notMoved) // Add the not moved cards
+            }
         }
 
+        
+        
+    
         // Add the two final arrrays together and return
         for runArray in remainingCards {
-            sortedRuns.append(runArray)
+            runsSortedByCount.append(runArray)
         }
         
-        return sortedRuns
-    }
-    
-    func getCurrentRunIndex(sortedRuns: [[Card]], card: Card, currentRunIndex: Int) -> Int {
-        // Loop through our added ordered runs, backwards
-        var index = sortedRuns.count - 1
-        while index > -1 { // Include 0 for 1st position
-            
-            // If an added run has the same suit and this card can be appended to
-            // the added run, add it and update the run index to this run's index
-            let lastCard = sortedRuns[index].last!
-            if lastCard.suit == card.suit && lastCard.order < card.order && index <= currentRunIndex {
-                return index
-            }
-
-            index = index - 1
-        }
-        
-        // There wasn't an available run, start a new one
-        return sortedRuns.count
+        return runsSortedByCount
     }
     
     func getRunData(hand: [Card]) -> [[Card]] {
