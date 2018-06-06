@@ -53,20 +53,6 @@ class Hand {
         return copy
     }
     
-    func removeWildsFromHand(wild: Name, hand: [Card]) -> (wilds: [Card], hand: [Card]) {
-        // Pull wilds from the remaining cards
-        var wilds = [Card]()
-        var newHand = [Card]()
-        for card in hand {
-            if card.name == wild || card.name == .redJoker || card.name == .blackJoker {
-                wilds.append(card)
-            } else {
-                newHand.append(card)
-            }
-        }
-        return (wilds, newHand)
-    }
-    
     // Makes a new hand with all sets removed, then returns the
     // points of the remaining hand with all runs removed
     func getTotalPointsBasedOnSets(hand: [Card], wild: Name) -> Int {
@@ -156,6 +142,9 @@ class Hand {
     // from least number of cards in the run to the most
     // THIS IS BUILT WITH A MAXIMUM OF THREE DECKS BEING USED
     func organizedByRuns(hand: [Card], wild: Name) -> [[Card]] {
+        let result: (wilds: [Card], hand: [Card]) = removeWildsFromHand(wild: wild, hand: hand)
+        let hand = result.hand
+        var wilds = result.wilds
         
         let currentData: [[Card]] = getRunData(hand: hand) // Starting Data to comb through
         var currentRunIndex = 0 // Index of a current unique run to append a card
@@ -244,8 +233,118 @@ class Hand {
             }
         }
 
-        
-        
+        // Add wilds to remaining cards to lessen as many points as possible
+        while wilds.count > 0 {
+            
+            var twoCardPoints = false
+            var maxPoints = 0
+            var remainingCardIndex = 0
+            var maxArrayIndex = 0
+            var uniqueRunMaxArrayIndex = 0
+
+            for addedCards in remainingCards {
+                // Get the total points for each opportunity to add a wild
+                var points = 0
+                
+                // If there's 2 cards
+                if addedCards.count == 2 {
+                    // Add the points of the two cards together
+                    for card in addedCards {
+                        points = points + card.points
+                    }
+                    
+                    // Compare points with max points
+                    if points > maxPoints {
+                        maxPoints = points
+                        maxArrayIndex = remainingCardIndex
+                        twoCardPoints = true
+                    }
+                    
+                    // There's only a single card & it's points are higher than the max points
+                } else if addedCards.count == 1 && addedCards[0].points > maxPoints {
+                    
+                    // Loop through the unique runs and see if this card could be added
+                    var couldBeAdded = false
+                    var uniqueRunIndex = 0
+                    for uniqueRun in uniqueRuns {
+                        
+                        // If this unique run has the same suit
+                        if uniqueRun.last!.suit == addedCards[0].suit {
+                            
+                            // If the card of this added run is 2 positions (accounting for a
+                            // wild in one of them) ahead of the first card in the unique run
+                            if uniqueRun.first!.order - 2 == addedCards[0].order {
+                                couldBeAdded = true
+                                uniqueRunMaxArrayIndex = uniqueRunIndex
+                                break
+                                
+                                // If the card of this added run is 2 positions (accounting for a
+                                // wild in one of them) behind of the last card in the unique run
+                            } else if uniqueRun.last!.order + 2 == addedCards[0].order {
+                                couldBeAdded = true
+                                uniqueRunMaxArrayIndex = uniqueRunIndex
+                                break
+                            }
+                        }
+                        
+                        uniqueRunIndex = uniqueRunIndex + 1
+                    }
+                    
+                    // If we found an array that we could add a wild and
+                    // this card, update max points and max array index
+                    if couldBeAdded {
+                        maxPoints = points
+                        maxArrayIndex = remainingCardIndex
+                        twoCardPoints = false
+                    }
+                    
+                    remainingCardIndex = remainingCardIndex + 1
+                }
+                
+                if maxPoints > 0 {
+                    
+                    // Max points was in a pair
+                    if twoCardPoints {
+                        
+                        // Grab the partial run from remaining cards
+                        var newRun = remainingCards[maxArrayIndex]
+                        
+                        // Move wild from wilds array and append it to the new run
+                        newRun.append(wilds[0])
+                        wilds.remove(at: 0)
+                        
+                        // Move the new run from remaining cards and add it to the unique runs
+                        uniqueRuns.append(newRun)
+                        remainingCards.remove(at: maxArrayIndex)
+                        
+                        // Max points was with a signle card
+                    } else {
+                        
+                        // Grab the card arrays from remaining cards & unique runs
+                        var addedCards = remainingCards[maxArrayIndex]
+                        var uniqueRun = uniqueRuns[uniqueRunMaxArrayIndex]
+
+                        if uniqueRun.first!.order - 2 == addedCards[0].order {
+                            // Insert the single card to the begining of the unique run array
+                            // Insert wild into the second postion of the run array
+                            uniqueRun.insert(addedCards[0], at: 0)
+                            uniqueRun.insert(wilds[0], at: 1)
+
+                        } else if uniqueRun.last!.order + 2 == addedCards[0].order {
+                            // Append the wild & single card to the end of the unique array
+                            uniqueRun.append(wilds[0])
+                            uniqueRun.append(addedCards[0])
+                        }
+
+                        // Remove wild from wilds array
+                        wilds.remove(at: 0)
+                        
+                        // Remove the single card array from remaining cards
+                        remainingCards.remove(at: maxArrayIndex)
+                    }
+                }
+            }
+        }
     
         // Add the two final arrrays together and return
         for runArray in remainingCards {
@@ -279,4 +378,19 @@ class Hand {
         }
         return arrayOfRuns.sorted(by: { $0.count < $1.count })
     }
+    
+    func removeWildsFromHand(wild: Name, hand: [Card]) -> (wilds: [Card], hand: [Card]) {
+        // Pull wilds from the remaining cards
+        var wilds = [Card]()
+        var newHand = [Card]()
+        for card in hand {
+            if card.name == wild || card.name == .redJoker || card.name == .blackJoker {
+                wilds.append(card)
+            } else {
+                newHand.append(card)
+            }
+        }
+        return (wilds, newHand)
+    }
+
 }
