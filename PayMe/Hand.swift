@@ -49,18 +49,26 @@ class Hand {
     // Makes a new hand with all sets removed, then returns the
     // points of the remaining hand with all runs removed
     func getTotalPointsBasedOnSets(hand: [Card], wild: Name) -> Int {
-        
+
         // Seperate wilds from the hand
         let result = removeWildsFromHand(wild: wild, hand: hand)
         
-        // Make an array of non set cards and remaining wild cards
-        let sortIntoSets = SetSorting().sortIntoSetsAndWilds(hand: result.hand, wilds: result.wilds)
         
-        // Make an array of non run cards and remaining wild cards
-        let nonRunCards = RunSorting().getNonRunCards(hand: sortIntoSets.nonSetCards)
+        // REMOVE SETS AND THEN RUNS
+        // Make an array of non set cards
+        let nonSetCards = SetSorting().getNonSetCards(hand: result.hand)
         
+        // Make an array of non run cards
+        let nonRunCards = RunSorting().getNonRunCards(hand: nonSetCards)
+        
+        
+        // ADD WILDS THEN REMOVE SETS AND THEN RUNS
+        // Make an array of non set cards by adding wilds to the existing cards to make runs
+        let nonSetCardsWithWilds = addWildsToMakeSets(wilds: result.wilds, hand: nonRunCards)
+
+        // Gather final points with the remaing cards that wilds couldn't help
         var finalPoints = 0
-        for card in nonRunCards {
+        for card in addWildsToMakeRuns(wilds: nonSetCardsWithWilds.wilds, hand: nonSetCardsWithWilds.nonSetCards).nonRunCards {
             finalPoints = finalPoints + card.points
         }
         
@@ -74,18 +82,64 @@ class Hand {
         // Seperate wilds from the hand
         let result = removeWildsFromHand(wild: wild, hand: hand)
         
-        // Make an array of non run cards and remaining wild cards
+        
+        // REMOVE RUNS AND THEN SETS
+        // Make an array of non run cards
         let nonRunCards = RunSorting().getNonRunCards(hand: result.hand)
         
-        // Make an array of non set cards and remaining wild cards
-        let sortIntoSets = SetSorting().sortIntoSetsAndWilds(hand: nonRunCards, wilds:result.wilds)
-
+        // Make an array of non set cards
+        let nonSetCards = SetSorting().getNonSetCards(hand: nonRunCards)
+        
+        
+        // ADD WILDS THEN REMOVE RUNS AND THEN SETS
+        // Make an array of non run cards by adding wilds to the existing cards to make sets
+        let nonRunCardsWithWilds = addWildsToMakeRuns(wilds: result.wilds, hand: nonSetCards)
+        
+        // Gather final points with the remaing cards that wilds couldn't help
         var finalPoints = 0
-        for card in sortIntoSets.nonSetCards {
+        for card in addWildsToMakeSets(wilds: nonRunCardsWithWilds.wilds, hand: nonRunCardsWithWilds.nonRunCards).nonSetCards {
             finalPoints = finalPoints + card.points
         }
         
         return finalPoints
+    }
+    
+    func addWildsToMakeSets(wilds: [Card], hand: [Card]) -> (nonSetCards: [Card], wilds: [Card]) {
+        // Make array of sets that include wilds and the remaining wilds
+        let setsWithWilds = SetWildSorting().makeSetsFromWilds(hand: hand, wilds: wilds)
+        
+        // Make new hand without sets
+        var handWithoutSets = [Card]()
+        for set in setsWithWilds.sortedBySets {
+            if set.count < 3 {
+                
+                for card in set {
+                    
+                    handWithoutSets.append(card)
+                }
+            }
+        }
+        
+        // Return an array of non run cards and the remaining wilds
+        return (SetSorting().getNonSetCards(hand: handWithoutSets), setsWithWilds.wilds)
+    }
+    
+    func addWildsToMakeRuns(wilds: [Card], hand: [Card]) -> (nonRunCards: [Card], wilds: [Card]) {
+        // Make array of runs that include wilds and the unused wilds
+        let runsWithWilds = RunWildSorting().makeRunsFromWilds(wilds: wilds, hand: hand)
+        
+        // Make new hand without runs
+        var handWithoutRuns = [Card]()
+        for run in runsWithWilds.sortedByRuns {
+            if run.count < 3 {
+                for card in run {
+                    handWithoutRuns.append(card)
+                }
+            }
+        }
+        
+        // Return an array of non run cards and the remaining wilds
+        return (RunSorting().getNonRunCards(hand: handWithoutRuns), runsWithWilds.wilds)
     }
     
     func sortHand(hand: [Card], byLow: Bool) -> [Card] {
@@ -95,7 +149,6 @@ class Hand {
             return hand.sorted(by: { $0.order > $1.order })
         }
     }
-    
     
     func removeWildsFromHand(wild: Name, hand: [Card]) -> (wilds: [Card], hand: [Card]) {
         // Pull wilds from the remaining cards

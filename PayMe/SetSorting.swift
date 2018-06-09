@@ -10,25 +10,25 @@ import Foundation
 
 class SetSorting: NSObject {
     
-    // Make an array of non set cards and remaining wild cards
-    func sortIntoSetsAndWilds(hand: [Card], wilds: [Card]) -> (nonSetCards: [Card], wilds: [Card]) {
+    // Make an array of non set cards
+    func getNonSetCards(hand: [Card]) -> [Card] {
         var nonSetCards = [Card]()
-        var sortedBySets = SetSorting().organizedBySets(hand: hand, wilds: wilds)
-        while sortedBySets.sortedBySets.filter( { $0.count < 3 } ).count > 0 {
+        var sortedBySets = SetSorting().organizedBySets(hand: hand)
+        while sortedBySets.filter( { $0.count < 3 } ).count > 0 {
             
             // Loop through the array of runs
             var index = 0
-            while index < sortedBySets.sortedBySets.count {
+            while index < sortedBySets.count {
                 
                 // If the run has less than 3 cards
-                let run = sortedBySets.sortedBySets[index]
+                let run = sortedBySets[index]
                 if run.count < 3 {
                     for card in run {
                         nonSetCards.append(card)
                     }
                     
                     // Remove partial run from runs array
-                    sortedBySets.sortedBySets.remove(at: index)
+                    sortedBySets.remove(at: index)
                 } else {
                     
                     // Only increment if we're not removing cards
@@ -37,62 +37,11 @@ class SetSorting: NSObject {
             }
         }
         
-        return (nonSetCards, sortedBySets.wilds)
+        return nonSetCards
     }
     
     // Returns the player's hand organized by sets into an array of sets
-    func organizedBySets(hand: [Card], wilds: [Card]) -> (sortedBySets: [[Card]], wilds: [Card]) {
-        var sortedBySets = getSortedBySets(hand: hand).sorted(by: { $0.count < $1.count })
-        var wilds = wilds
-        
-        while wilds.count > 0 {
-            var maxPoints = 0
-            var maxPointsIndex = 0
-            var index = 0
-            
-            // Go through each 'set' of the sorted sets
-            for cards in sortedBySets {
-                
-                // If there's no more 'sets' with less than 3 cards
-                if !Bool(sortedBySets.filter( { $0.count < 3 } ).count > 0) {
-                    
-                    // Return the sortedBySets and remaning wilds
-                    return (sortedBySets, wilds)
-                    
-                } else {
-                    // If there's a single card in the 'set' and it's points are greater than the max points
-                    if cards.count == 1 && cards[0].points > maxPoints {
-                        maxPoints = cards[0].points
-                        maxPointsIndex = index
-                        
-                        // If there's two cards in the 'set'
-                    } else if cards.count == 2 {
-                        
-                        // Check to see if their points are greater than the max points
-                        let points = cards[0].points + cards[1].points
-                        if points > maxPoints {
-                            maxPoints = points
-                            maxPointsIndex = index
-                        }
-                    }
-                    
-                    // Don't check completed sets
-                    index = index + 1
-                }
-                
-                if maxPointsIndex > 0 {
-                    sortedBySets[maxPointsIndex].append(wilds[0])
-                    wilds.remove(at: 0)
-                    
-                    sortedBySets = sortedBySets.sorted(by: { $0.count < $1.count })
-                }
-            }
-        }
-        
-        return (sortedBySets, wilds)
-    }
-    
-    func getSortedBySets(hand: [Card]) -> [[Card]] {
+    func organizedBySets(hand: [Card]) -> [[Card]] {
         // The current set we're appending to
         var currentSet = [Card]()
         

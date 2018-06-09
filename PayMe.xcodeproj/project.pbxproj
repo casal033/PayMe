@@ -20,6 +20,8 @@
 		232EA3E420BF7ED300263776 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E320BF7ED300263776 /* Deck.swift */; };
 		232EA3E620BF8B5500263776 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E520BF8B5500263776 /* Player.swift */; };
 		232EA3E820C35C7D00263776 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E720C35C7D00263776 /* Hand.swift */; };
+		23381DD620CC415F00D5E695 /* RunWildSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23381DD520CC415F00D5E695 /* RunWildSorting.swift */; };
+		23381DD820CC419D00D5E695 /* SetWildSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23381DD720CC419D00D5E695 /* SetWildSorting.swift */; };
 		237C65E120C3733500B64DB5 /* Faces in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E020C3733500B64DB5 /* Faces */; };
 		237C65E320C3735800B64DB5 /* Backs in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E220C3735800B64DB5 /* Backs */; };
 		237C65E720C374FD00B64DB5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237C65E620C374FD00B64DB5 /* CardView.swift */; };
@@ -62,6 +64,8 @@
 		232EA3E320BF7ED300263776 /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		232EA3E520BF8B5500263776 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		232EA3E720C35C7D00263776 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hand.swift; sourceTree = "<group>"; };
+		23381DD520CC415F00D5E695 /* RunWildSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunWildSorting.swift; sourceTree = "<group>"; };
+		23381DD720CC419D00D5E695 /* SetWildSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWildSorting.swift; sourceTree = "<group>"; };
 		237C65E020C3733500B64DB5 /* Faces */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Faces; path = Images/Faces; sourceTree = "<group>"; };
 		237C65E220C3735800B64DB5 /* Backs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Backs; path = Images/Backs; sourceTree = "<group>"; };
 		237C65E620C374FD00B64DB5 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -154,7 +158,9 @@
 				232EA3E720C35C7D00263776 /* Hand.swift */,
 				232EA3E520BF8B5500263776 /* Player.swift */,
 				23269EAC20CB5A2B0016D399 /* RunSorting.swift */,
+				23381DD520CC415F00D5E695 /* RunWildSorting.swift */,
 				23269EAE20CC1A1F0016D399 /* SetSorting.swift */,
+				23381DD720CC419D00D5E695 /* SetWildSorting.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -320,9 +326,11 @@
 				232EA3B520BF753B00263776 /* ViewController.swift in Sources */,
 				232EA3E820C35C7D00263776 /* Hand.swift in Sources */,
 				232EA3E220BF758600263776 /* Card.swift in Sources */,
+				23381DD820CC419D00D5E695 /* SetWildSorting.swift in Sources */,
 				232EA3E620BF8B5500263776 /* Player.swift in Sources */,
 				23269EAD20CB5A2B0016D399 /* RunSorting.swift in Sources */,
 				23269EAF20CC1A1F0016D399 /* SetSorting.swift in Sources */,
+				23381DD620CC415F00D5E695 /* RunWildSorting.swift in Sources */,
 				232EA3B320BF753B00263776 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,7 +505,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MaggieCasale.PayMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -510,7 +518,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MaggieCasale.PayMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
