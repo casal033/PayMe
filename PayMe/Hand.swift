@@ -112,9 +112,7 @@ class Hand {
         var handWithoutSets = [Card]()
         for set in setsWithWilds.sortedBySets {
             if set.count < 3 {
-                
                 for card in set {
-                    
                     handWithoutSets.append(card)
                 }
             }

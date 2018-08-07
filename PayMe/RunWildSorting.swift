@@ -45,6 +45,7 @@ class RunWildSorting: NSObject {
                     return (sortedByRuns, wilds)
                 }
                 
+                // TODO: Handle case for checking two wilds. Also do thhis in sets class.
                 let result = getPointsWithWilds(addedCards: addedCards, maxPoints: maxPoints, remainingCardIndex: remainingCardIndex, sortedByRuns: sortedByRuns)
                 
                 twoCardPoints = result.twoCardPoints

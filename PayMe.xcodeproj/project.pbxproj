@@ -22,6 +22,10 @@
 		232EA3E820C35C7D00263776 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA3E720C35C7D00263776 /* Hand.swift */; };
 		23381DD620CC415F00D5E695 /* RunWildSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23381DD520CC415F00D5E695 /* RunWildSorting.swift */; };
 		23381DD820CC419D00D5E695 /* SetWildSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23381DD720CC419D00D5E695 /* SetWildSorting.swift */; };
+		2338733E2119E9C00051CF59 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2338733C2119E9C00051CF59 /* HomeViewController.swift */; };
+		2338733F2119E9C00051CF59 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2338733D2119E9C00051CF59 /* HomeViewController.xib */; };
+		233873442119EBFE0051CF59 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233873422119EBFE0051CF59 /* PlayViewController.swift */; };
+		233873452119EBFE0051CF59 /* PlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 233873432119EBFE0051CF59 /* PlayViewController.xib */; };
 		237C65E120C3733500B64DB5 /* Faces in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E020C3733500B64DB5 /* Faces */; };
 		237C65E320C3735800B64DB5 /* Backs in Resources */ = {isa = PBXBuildFile; fileRef = 237C65E220C3735800B64DB5 /* Backs */; };
 		237C65E720C374FD00B64DB5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237C65E620C374FD00B64DB5 /* CardView.swift */; };
@@ -66,6 +70,10 @@
 		232EA3E720C35C7D00263776 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hand.swift; sourceTree = "<group>"; };
 		23381DD520CC415F00D5E695 /* RunWildSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunWildSorting.swift; sourceTree = "<group>"; };
 		23381DD720CC419D00D5E695 /* SetWildSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWildSorting.swift; sourceTree = "<group>"; };
+		2338733C2119E9C00051CF59 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		2338733D2119E9C00051CF59 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		233873422119EBFE0051CF59 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		233873432119EBFE0051CF59 /* PlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayViewController.xib; sourceTree = "<group>"; };
 		237C65E020C3733500B64DB5 /* Faces */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Faces; path = Images/Faces; sourceTree = "<group>"; };
 		237C65E220C3735800B64DB5 /* Backs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Backs; path = Images/Backs; sourceTree = "<group>"; };
 		237C65E620C374FD00B64DB5 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -119,6 +127,7 @@
 		232EA3B120BF753B00263776 /* PayMe */ = {
 			isa = PBXGroup;
 			children = (
+				23DED1BB210F96F000ECFCDC /* View Controllers */,
 				232EA3B220BF753B00263776 /* AppDelegate.swift */,
 				232EA3B420BF753B00263776 /* ViewController.swift */,
 				237C655F20C36E7F00B64DB5 /* Images */,
@@ -180,6 +189,17 @@
 				237C65E620C374FD00B64DB5 /* CardView.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		23DED1BB210F96F000ECFCDC /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				233873422119EBFE0051CF59 /* PlayViewController.swift */,
+				233873432119EBFE0051CF59 /* PlayViewController.xib */,
+				2338733C2119E9C00051CF59 /* HomeViewController.swift */,
+				2338733D2119E9C00051CF59 /* HomeViewController.xib */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,8 +315,10 @@
 				237C65E120C3733500B64DB5 /* Faces in Resources */,
 				237C65E320C3735800B64DB5 /* Backs in Resources */,
 				232EA3BD20BF753B00263776 /* LaunchScreen.storyboard in Resources */,
+				233873452119EBFE0051CF59 /* PlayViewController.xib in Resources */,
 				232EA3BA20BF753B00263776 /* Assets.xcassets in Resources */,
 				232EA3B820BF753B00263776 /* Main.storyboard in Resources */,
+				2338733F2119E9C00051CF59 /* HomeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +345,7 @@
 			files = (
 				237C65E720C374FD00B64DB5 /* CardView.swift in Sources */,
 				232EA3E420BF7ED300263776 /* Deck.swift in Sources */,
+				233873442119EBFE0051CF59 /* PlayViewController.swift in Sources */,
 				232EA3B520BF753B00263776 /* ViewController.swift in Sources */,
 				232EA3E820C35C7D00263776 /* Hand.swift in Sources */,
 				232EA3E220BF758600263776 /* Card.swift in Sources */,
@@ -331,6 +354,7 @@
 				23269EAD20CB5A2B0016D399 /* RunSorting.swift in Sources */,
 				23269EAF20CC1A1F0016D399 /* SetSorting.swift in Sources */,
 				23381DD620CC415F00D5E695 /* RunWildSorting.swift in Sources */,
+				2338733E2119E9C00051CF59 /* HomeViewController.swift in Sources */,
 				232EA3B320BF753B00263776 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
